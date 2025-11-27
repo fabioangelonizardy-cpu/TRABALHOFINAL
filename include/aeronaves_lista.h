@@ -1,0 +1,14 @@
+#ifndef AERONAVES_LISTA_H
+#define AERONAVES_LISTA_H
+
+#include "./types.h"
+
+// Aeronaves (LISTA)
+dados_aeronaves_t *cadastrar_nova_aeronave(); 
+void inserir_aeronave(dados_aeronaves_t **lista, dados_aeronaves_t *nova);
+dados_aeronaves_t *busca_aeronave_por_matricula(const char *matricula, dados_aeronaves_t *lista);
+void relatorio_aeronaves_cadastradas(dados_aeronaves_t *lista);
+void percentual_voos_realizados(const string matricula, dados_aeronaves_t *lista);
+void quantidade_de_manutencoes(const string matricula, dados_aeronaves_t *lista);
+
+#endif
