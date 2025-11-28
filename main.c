@@ -4,7 +4,12 @@
 #include "./include/remocoes.h"
 #include "./include/filtros.h"
 #include "./include/consulta_rotas.h"
-#include
+#include <stdbool.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stddef.h>
+
 
 //----------------------------------- VARIÁVEIS GLOBAIS -----------------------------------
 dados_aeronaves_t *base_aeronaves = NULL;
