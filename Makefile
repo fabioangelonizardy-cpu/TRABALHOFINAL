@@ -30,7 +30,7 @@ $(TARGET): $(OBJS)
 
 # regra: compila main.c -> obj/main.o
 $(OBJ)/main.o: main.c | $(OBJ)
-    $(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 # regra: compila src/%.c -> obj/%.o
 $(OBJ)/%.o: $(SRC_DIR)/%.c | $(OBJ)
