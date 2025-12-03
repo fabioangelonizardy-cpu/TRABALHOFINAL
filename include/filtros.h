@@ -1,7 +1,7 @@
 #ifndef FILTROS_H
 #define FILTROS_H
 
-#include "./types.h"
+#include "types.h"
 
 // Filtros
 void listar_aeronaves_por_fabricante(const string fabricante, dados_aeronaves_t *lista);

@@ -3,11 +3,32 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include "./include/types.h"
-#include "./include/funcao_base.h"
-#include "./include/aeronaves_lista.h"
+#include "../include/types.h"
+#include "../include/funcao_base.h"
+#include "../include/aeronaves_lista.h"
 
 // ----------------------------------- CADASTRO DE AERONAVES -----------------------------------
+
+void inicializar_base_aeronaves(struct base_aeronaves *aeronaves)
+{
+    aeronaves->inicio = NULL;
+    aeronaves->fim = NULL;
+    aeronaves->contador = 0;
+
+}
+
+void inserir_aeronave(dados_aeronaves_t **lista, dados_aeronaves_t *nova)
+{
+    if (*lista == NULL) {
+        *lista = nova;
+    } else {
+        dados_aeronaves_t *atual = *lista;
+        while (atual->prox != NULL) {
+            atual = atual->prox;
+        }
+        atual->prox = nova;
+    }
+}
 
 dados_aeronaves_t *cadastrar_nova_aeronave()
 {
@@ -64,7 +85,7 @@ dados_aeronaves_t *cadastrar_nova_aeronave()
     // Inicializar registros de manutenção
     nova->n_manutencoes = 0;
     for (int i = 0; i < MAX_MANUTENCOES; i++) {
-        nova->manutencoes[i][0] = '\0';
+        nova->manutencoes[i] = '\0';
     }
 
     nova->prox = NULL;
@@ -88,18 +109,7 @@ void relatorio_aeronaves_cadastradas(dados_aeronaves_t *lista)
     }
 }
 
-void inserir_aeronave(dados_aeronaves_t **lista, dados_aeronaves_t *nova)
-{
-    if (*lista == NULL) {
-        *lista = nova;
-    } else {
-        dados_aeronaves_t *atual = *lista;
-        while (atual->prox != NULL) {
-            atual = atual->prox;
-        }
-        atual->prox = nova;
-    }
-}
+
 dados_aeronaves_t *busca_aeronave_por_matricula(const char *matricula, dados_aeronaves_t *lista)
 {
     while (lista != NULL) {

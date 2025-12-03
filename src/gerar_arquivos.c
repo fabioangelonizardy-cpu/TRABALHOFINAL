@@ -3,105 +3,271 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include "./include/types.h"
-#include "./include/funcao_base.h"
+#include "../include/types.h"
+#include "../include/funcao_base.h"
+#include "../include/gerar_arquivos.h"
+#include "../include/aeronaves_lista.h"
+#include "../include/consulta_rotas.h"
 
 // ----------------------------------- EXPORTAR PARA ARQUIVO DE TEXTO -----------------------------------
-void exportar_aeronaves_arquivo_texto(const string nome_arquivo, dados_aeronaves_t *lista)
+void salvar_dados_aeronaves_binario(struct dados_aeronaves *inicio)
 {
-    FILE *fp_arquivo = NULL;
-
-    fp_arquivo = fopen(nome_arquivo, "w");
-    if (fp_arquivo == NULL) {
-        perror("Erro ao abrir arquivo");
+    FILE *file = fopen("aeronaves.bin", "wb");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo para escrita.\n");
         return;
     }
 
-    while (lista) {
-        fprintf(fp_arquivo, "Identificação da aeronave: %s\n", lista->identificacao);
-        fprintf(fp_arquivo, "Modelo da aeronave: %s\n", lista->modelo);
-        fprintf(fp_arquivo, "Fabricante da aeronave: %s\n", lista->fabricante);
-        fprintf(fp_arquivo, "Matrícula da aeronave: %s\n", lista->matricula);
-        fprintf(fp_arquivo, "Ano de fabricação: %d\n", lista->ano_fabricacao);
-        fprintf(fp_arquivo, "Tipo de aeronave: %d\n", lista->tipo);
-        fprintf(fp_arquivo, "Situação da aeronave: %d\n", lista->situacao);
-        fprintf(fp_arquivo, "Número de passageiros: %d\n", lista->n_passageiros);
-        fprintf(fp_arquivo, "Número de pilotos: %d\n", lista->tripulacao.n_pilotos);
-        fprintf(fp_arquivo, "Número de co-pilotos: %d\n", lista->tripulacao.n_co_pilotos);
-        fprintf(fp_arquivo, "Número de comissários: %d\n", lista->tripulacao.n_comissarios);
-        fprintf(fp_arquivo, "\n");
-        lista = lista->prox;
-
-        //Podia fazer o modelinho dado em aula, mas pra ficar igual ao rotas (Que não tem função), deixei assim mesmo
+    struct dados_aeronaves *atual = inicio;
+    while (atual != NULL) {
+        fwrite(atual, sizeof(struct dados_aeronaves), 1, file);
+        atual = atual->prox;
     }
-
-    fclose(fp_arquivo);
-
+    fclose(file);
 
 }
-void exportar_rotas_arquivo_texto(const string nome_arquivo, dados_cia_t *lista)
-{
-    FILE *fp_arquivo = NULL;
 
-    fp_arquivo = fopen(nome_arquivo, "w");
-    if (fp_arquivo == NULL) {
-        perror("Erro ao abrir arquivo");
+void salvar_dados_rotas_binario(struct dados_cia *inicio)
+{
+    FILE *file = fopen("rotas.bin", "wb");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo para escrita.\n");
         return;
     }
 
-    while (lista) {
-        fprintf(fp_arquivo, "Código da rota: %s\n", lista->codigo_rota);
-        fprintf(fp_arquivo, "Data e hora de partida: %02d/%02d/%04d %02d:00\n",
-                lista->data_hora_partida.dia, lista->data_hora_partida.mes,
-                lista->data_hora_partida.ano, lista->data_hora_partida.hora);
-        fprintf(fp_arquivo, "Origem: %s\n", lista->origem);
-        fprintf(fp_arquivo, "Destino: %s\n", lista->destino);
-        fprintf(fp_arquivo, "Estimativa de voo: %d horas e %d minutos\n",
-                lista->estimativa_voo.horas_estimada, lista->estimativa_voo.minutos_estimados);
-        fprintf(fp_arquivo, "Combustível: %d litros\n", lista->combustivel);
-        fprintf(fp_arquivo, "Quantidade de passageiros: %d\n", lista->qtd_passageiros);
-        fprintf(fp_arquivo, "Quantidade de carga: %d kg\n", lista->qtd_carga);
-        fprintf(fp_arquivo, "Membros da tripulação: %s\n", lista->membros_tripulacao);
-        fprintf(fp_arquivo, "Aeronave alocada: %s\n", lista->aeronave_alocada);
-        fprintf(fp_arquivo, "\n");
-        lista = lista->prox;
+    struct dados_cia *atual = inicio;
+    while (atual != NULL) {
+        fwrite(atual, sizeof(struct dados_cia), 1, file);
+        atual = atual->prox;
     }
-
-    fclose(fp_arquivo);
+    fclose(file);
 
 }
-
-void exportar_aeronaves_arquivo_texto_binario(const string nome_arquivo, dados_aeronaves_t *lista)
+void carregar_dados_aeronaves(struct dados_aeronaves *aeronaves)
 {
-    FILE *fp_arquivo = NULL;
+    FILE *fp = NULL;
+    struct dados_aeronaves *novo = NULL;
 
-    fp_arquivo = fopen(nome_arquivo, "wb");
-    if (fp_arquivo == NULL) {
-        perror("Erro ao abrir arquivo");
+    fp = fopen("aeronaves.bin", "rb");
+    if (!fp) {
+        printf("Erro ao tentar abrir arquivo aeronaves.bin\n");
         return;
     }
+    while (!feof(fp)) {
+        novo = (struct dados_aeronaves*)malloc(sizeof(struct dados_aeronaves));
 
-    while (lista) {
-        fwrite(lista, sizeof(dados_aeronaves_t), 1, fp_arquivo);
-        lista = lista->prox;
+        fread(novo, sizeof(struct dados_aeronaves), 1, fp);
+        novo->prox = NULL;
+        if (!feof(fp)) {
+            inserir_aeronave(&aeronaves, novo);
+        }
+        else {
+            free(novo);
+        }
     }
+    fclose(fp);
 
-    fclose(fp_arquivo);
 }
-void exportar_rotas_arquivo_texto_binario(const string nome_arquivo, dados_cia_t *lista)
+void carregar_dados_rotas(struct dados_cia *rotas)
 {
-    FILE *fp_arquivo = NULL;
+    FILE *fp = NULL;
+    struct dados_cia *novo = NULL;
 
-    fp_arquivo = fopen(nome_arquivo, "wb");
-    if (fp_arquivo == NULL) {
-        perror("Erro ao abrir arquivo");
+    fp = fopen("rotas.bin", "rb");
+    if (!fp) {
+        printf("Erro ao tentar abrir arquivo rotas.bin\n");
         return;
     }
+    while (!feof(fp)) {
+        novo = (struct dados_cia*)malloc(sizeof(struct dados_cia));
 
-    while (lista) {
-        fwrite(lista, sizeof(dados_cia_t), 1, fp_arquivo);
-        lista = lista->prox;
+        fread(novo, sizeof(struct dados_cia), 1, fp);
+        novo->prox = NULL;
+        if (!feof(fp)) {
+            inserir_rota(&rotas, novo);
+        }
+        else {
+            free(novo);
+        }
+    }
+    fclose(fp);
+
+
+}
+void exportar_aeronaves_arquivo_txt(struct base_aeronaves *aeronaves, char *nome_arq)
+{
+        FILE *fp = NULL;
+
+    fp = fopen(nome_arq, "w");
+
+    if (fp == NULL) {
+        printf("Erro ao abrir o arquivo %s para escrita.\n", nome_arq);
+        return;
+    }
+    struct dados_aeronaves *atual = aeronaves->inicio;
+    while (atual != NULL) {
+        fprintf(fp, "Identificação: %s\n", atual->identificacao);
+        fprintf(fp, "Modelo: %s\n", atual->modelo);
+        fprintf(fp, "Fabricante: %s\n", atual->fabricante);
+        fprintf(fp, "Matrícula: %s\n", atual->matricula);
+        fprintf(fp, "Ano de Fabricação: %d\n", atual->ano_fabricacao);
+        fprintf(fp, "Tipo: %d\n", atual->tipo);
+        fprintf(fp, "Número de Passageiros: %d\n", atual->n_passageiros);
+        fprintf(fp, "Situação: %d\n", atual->situacao);
+        fprintf(fp, "--------------------------\n");
+        atual = atual->prox;
     }
 
-    fclose(fp_arquivo);
+    fclose(fp);
 }
+
+void exportar_rotas_arquivo_txt(struct base_rotas *rotas, char *nome_arq)
+{
+    FILE *fp = NULL;
+
+    fp = fopen(nome_arq, "w");
+
+    if (fp == NULL) {
+        printf("Erro ao abrir o arquivo %s para escrita.\n", nome_arq);
+        return;
+    }
+    struct dados_cia *atual = rotas->inicio;
+    while (atual != NULL) {
+        fprintf(fp, "Código da Rota: %s\n", atual->codigo_rota);
+        fprintf(fp, "Data e Hora de Partida: %02d/%02d/%04d %02dh\n", atual->data_hora_partida.dia, atual->data_hora_partida.mes, atual->data_hora_partida.ano, atual->data_hora_partida.hora);
+        fprintf(fp, "Origem: %s\n", atual->origem);
+        fprintf(fp, "Destino: %s\n", atual->destino);
+        fprintf(fp, "Combustível: %d\n", atual->combustivel);
+        fprintf(fp, "Quantidade de Passageiros: %d\n", atual->qtd_passageiros);
+        fprintf(fp, "Quantidade de Carga: %d\n", atual->qtd_carga);
+        fprintf(fp, "Quantidade de Tripulação: %d\n", atual->qtd_tripulacao);
+        fprintf(fp, "Membros da Tripulação: %s\n", atual->membros_tripulacao);
+        fprintf(fp, "Aeronave Alocada: %s\n", atual->aeronave_alocada);
+        fprintf(fp, "--------------------------\n");
+        atual = atual->prox;
+    }
+
+    fclose(fp);
+
+
+}
+void exportar_aeronaves_arquivo_csv(struct base_aeronaves *aeronaves, char *nome_arq)
+{
+    FILE *fp = NULL;
+
+        fp = fopen(nome_arq, "w");
+    if (fp == NULL) {
+        printf("Erro ao abrir o arquivo %s para escrita.\n", nome_arq);
+        return;
+    }
+    struct dados_aeronaves *atual = aeronaves->inicio;
+    // Cabeçalho CSV
+    fprintf(fp, "Identificação,Modelo,Fabricante,Matrícula,Ano de Fabricação,Tipo,Número de Passageiros,Situação\n");
+    while (atual != NULL) {
+        fprintf(fp, "\"%s\",\"%s\",\"%s\",\"%s\",%d,%d,%d,%d\n",
+                atual->identificacao,
+                atual->modelo,
+                atual->fabricante,
+                atual->matricula,
+                atual->ano_fabricacao,
+                atual->tipo,
+                atual->n_passageiros,
+                atual->situacao);
+
+        atual = atual->prox;
+
+        }
+}
+void exportar_rotas_arquivo_csv(struct base_rotas *rotas, char *nome_arq)
+{
+    FILE *fp = NULL;
+
+        fp = fopen(nome_arq, "w");
+    if (fp == NULL) {
+        printf("Erro ao abrir o arquivo %s para escrita.\n", nome_arq);
+        return;
+    }
+    struct dados_cia *atual = rotas->inicio;
+    // Cabeçalho CSV
+    fprintf(fp, "Código da Rota,Data e Hora de Partida,Origem,Destino,Combustível,Quantidade de Passageiros,Quantidade de Carga,Quantidade de Tripulação,Membros da Tripulação,Aeronave Alocada\n");
+    while (atual != NULL) {
+        fprintf(fp, "\"%s\",\"%02d/%02d/%04d %02dh\",\"%s\",\"%s\",%d,%d,%d,%d,\"%s\",\"%s\"\n",
+                atual->codigo_rota,
+                atual->data_hora_partida.dia,
+                atual->data_hora_partida.mes,
+                atual->data_hora_partida.ano,
+                atual->data_hora_partida.hora,
+                atual->origem,
+                atual->destino,
+                atual->combustivel,
+                atual->qtd_passageiros,
+                atual->qtd_carga,
+                atual->qtd_tripulacao,
+                atual->membros_tripulacao,
+                atual->aeronave_alocada);
+
+        atual = atual->prox;
+
+        }
+
+}
+void exportar_aeronaves_arquivo_html(struct base_aeronaves *aeronaves, char *nome_arq)
+{
+        FILE *fp = NULL;
+
+    fp = fopen(nome_arq, "w");
+
+    if (!fp) {
+        printf("Erro ao tentar abrir arquivo %s\n", nome_arq);
+        return;
+    }
+    fprintf(fp, "<HTML> <HEAD> <TITLE> RELATORIO DE AERONAVES </TITLE> </HEAD> <BODY> \n");
+    fprintf(fp, "<TABLE border = '1'> <TR> <TH> IDENTIFICAÇÃO </TH> <TH> MODELO </TH> <TH> FABRICANTE </TH> <TH> MATRÍCULA </TH> <TH> ANO DE FABRICAÇÃO </TH> <TH> TIPO </TH> <TH> NÚMERO DE PASSAGEIROS </TH> <TH> SITUAÇÃO </TH> </TR>\n");
+    struct dados_aeronaves *atual = aeronaves->inicio;
+    while (atual) {
+        fprintf(fp, "<TR> <TD> %s </TD> <TD> %s </TD> <TD>%s</TD> <TD>%s</TD> <TD>%d</TD> <TD>%d</TD> <TD>%d</TD> <TD>%d</TD> </TR>\n",
+                atual->identificacao,
+                atual->modelo,
+                atual->fabricante,
+                atual->matricula,
+                atual->ano_fabricacao,
+                atual->tipo,
+                atual->n_passageiros,
+                atual->situacao);
+        atual = atual->prox; 
+    }
+
+}
+void exportar_rotas_arquivo_html(struct base_rotas *rotas, char *nome_arq)
+{
+    FILE *fp = NULL;
+
+    fp = fopen(nome_arq, "w");
+
+    if (!fp) {
+        printf("Erro ao tentar abrir arquivo %s\n", nome_arq);
+        return;
+    }
+    fprintf(fp, "<HTML> <HEAD> <TITLE> RELATORIO DE ROTAS </TITLE> </HEAD> <BODY> \n");
+    fprintf(fp, "<TABLE border = '1'> <TR> <TH> CÓDIGO DA ROTA </TH> <TH> DATA E HORA DE PARTIDA </TH> <TH> ORIGEM </TH> <TH> DESTINO </TH> <TH> COMBUSTÍVEL </TH> <TH> QUANTIDADE DE PASSAGEIROS </TH> <TH> QUANTIDADE DE CARGA </TH> <TH> QUANTIDADE DE TRIPULAÇÃO </TH> <TH> MEMBROS DA TRIPULAÇÃO </TH> <TH> AERONAVE ALOCADA </TH> </TR>\n");
+    struct dados_cia *atual = rotas->inicio;
+    while (atual) {
+        fprintf(fp, "<TR> <TD> %s </TD> <TD> %02d/%02d/%04d %02dh </TD> <TD>%s</TD> <TD>%s</TD> <TD>%d</TD> <TD>%d</TD> <TD>%d</TD> <TD>%d</TD> <TD>%s</TD> <TD>%s</TD> </TR>\n",
+                atual->codigo_rota,
+                atual->data_hora_partida.dia,
+                atual->data_hora_partida.mes,
+                atual->data_hora_partida.ano,
+                atual->data_hora_partida.hora,
+                atual->origem,
+                atual->destino,
+                atual->combustivel,
+                atual->qtd_passageiros,
+                atual->qtd_carga,
+                atual->qtd_tripulacao,
+                atual->membros_tripulacao,
+                atual->aeronave_alocada);
+        atual = atual->prox; 
+    }
+
+}
+

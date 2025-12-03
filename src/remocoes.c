@@ -3,8 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include "./include/types.h"
-#include "./include/funcao_base.h"
+#include "../include/types.h"
+#include "../include/funcao_base.h"
 
 // ----------------------------------- REMOÇÕES -----------------------------------
 

@@ -1,3 +1,6 @@
+#ifndef TYPES_H
+#define TYPES_H
+
 //Constantes
 #define STR_SIZE 100
 #define MAX_AVIAO 100
@@ -47,7 +50,7 @@ typedef struct dados_aeronaves
     tipo_t tipo;
     int n_passageiros;
     int n_manutencoes;
-    string manutencoes[MAX_MANUTENCOES];
+    int manutencoes[MAX_MANUTENCOES];
     situacao_t situacao;
     tripulacao_t tripulacao;
     struct dados_aeronaves *prox;
@@ -71,5 +74,16 @@ typedef struct dados_cia
 
 } dados_cia_t;
 
-dados_aeronaves_t *base_aeronaves = NULL;
-dados_cia_t *base_rotas = NULL;
+struct base_aeronaves {
+    unsigned int contador;
+    dados_aeronaves_t *inicio;
+    dados_aeronaves_t *fim;
+};
+
+struct base_rotas {
+    unsigned int contador;
+    dados_cia_t *inicio;
+    dados_cia_t *fim;
+};
+
+#endif

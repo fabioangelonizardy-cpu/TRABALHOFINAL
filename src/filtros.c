@@ -3,10 +3,14 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include "./include/types.h"
-#include "./include/funcao_base.h"
+#include "../include/types.h"
+#include "../include/funcao_base.h"
+#include "../include/aeronaves_lista.h"
 
 // ----------------------------------- FILTROS AERONAVES -----------------------------------
+
+dados_aeronaves_t *base_aeronaves = NULL;
+dados_cia_t *base_rotas = NULL; //Se eu colocar em types.h dá erro, então vai ficar em todas as libs que usam
 
 void listar_aeronaves_por_fabricante(const string fabricante, dados_aeronaves_t *lista)
 {
@@ -106,7 +110,7 @@ void manutencoes_aeronave(const string matricula, dados_aeronaves_t *lista)
             printf("Nenhuma manutenção registrada.\n");
         } else {
             for (int i = 0; i < aeronave->n_manutencoes && i < MAX_MANUTENCOES; i++) {
-                printf("- %s\n", aeronave->manutencoes[i]);
+                printf("- %i\n", aeronave->manutencoes[i]);
             }
         }
     } else {
