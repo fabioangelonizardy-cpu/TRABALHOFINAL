@@ -213,14 +213,38 @@ void percentual_voos_realizados_destino(const string destino, dados_cia_t *lista
 
 int consumo_combustivel_intervalo_datas(data_hora_t data_inicio, data_hora_t data_fim, dados_cia_t *lista)
 {
-    int total_combustivel = 0;
+    int consumo_total = 0;
     while (lista != NULL) {
-        if (date_in_range(lista->data_hora_partida, data_inicio, data_fim)) {
-            total_combustivel += lista->combustivel;
+        bool dentro_intervalo = false;
+
+        if (lista->data_hora_partida.ano > data_inicio.ano &&
+            lista->data_hora_partida.ano < data_fim.ano) {
+            dentro_intervalo = true;
+        } else if (lista->data_hora_partida.ano == data_inicio.ano) {
+            if (lista->data_hora_partida.mes > data_inicio.mes ||
+                (lista->data_hora_partida.mes == data_inicio.mes &&
+                 lista->data_hora_partida.dia >= data_inicio.dia)) {
+                dentro_intervalo = true;
+            }
+        } else if (lista->data_hora_partida.ano == data_fim.ano) {
+            if (lista->data_hora_partida.mes < data_fim.mes ||
+                (lista->data_hora_partida.mes == data_fim.mes &&
+                 lista->data_hora_partida.dia <= data_fim.dia)) {
+                dentro_intervalo = true;
+            }
         }
+
+        if (dentro_intervalo) {
+            consumo_total += lista->combustivel;
+        }
+
         lista = lista->prox;
     }
-    return total_combustivel;
+    printf("Consumo total de combustível entre %02d/%02d/%04d e %02d/%02d/%04d: %d litros\n",
+           data_inicio.dia, data_inicio.mes, data_inicio.ano,
+           data_fim.dia, data_fim.mes, data_fim.ano,
+           consumo_total);
+    return consumo_total;
 }
 
 void listar_rota_maior_numero_passageiros(dados_cia_t *lista)

@@ -83,6 +83,7 @@ dados_aeronaves_t *cadastrar_nova_aeronave()
     return nova;
 }
 
+
 void relatorio_aeronaves_cadastradas(dados_aeronaves_t *lista)
 {
     while (lista != NULL) {
@@ -126,18 +127,12 @@ void alterar_situacao_aeronave(const string matricula, situacao_t nova_situacao,
     }
 }
 
-void manutencoes_aeronave(const string matricula, dados_aeronaves_t *lista)
+
+void quantidade_manutencoes_aeronave(const string matricula, dados_aeronaves_t *lista)
 {
     dados_aeronaves_t *aeronave = busca_aeronave_por_matricula(matricula, lista);
     if (aeronave != NULL) {
-        printf("Manutenções da aeronave com matrícula '%s':\n", matricula);
-        if (aeronave->n_manutencoes == 0) {
-            printf("Nenhuma manutenção registrada.\n");
-        } else {
-            for (int i = 0; i < aeronave->n_manutencoes && i < MAX_MANUTENCOES; i++) {
-                printf("- %i\n", aeronave->manutencoes[i]);
-            }
-        }
+        printf("A aeronave com matrícula '%s' possui %d manutenções registradas.\n", matricula, aeronave->n_manutencoes);
     } else {
         printf("Aeronave com matrícula '%s' não encontrada.\n", matricula);
     }
