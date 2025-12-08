@@ -20,7 +20,7 @@ void inicializar_base_aeronaves(struct base_aeronaves *aeronaves)
 void inserir_aeronave_base_dados(struct base_aeronaves *aeronaves, dados_aeronaves_t *aeronave, int modo)
 {
     aeronave->prox = NULL;
-    
+
     if (aeronaves->inicio == NULL) {
         aeronaves->fim = aeronave;
         aeronaves->inicio = aeronave;
@@ -87,7 +87,11 @@ dados_aeronaves_t *cadastrar_nova_aeronave()
     printf("Tipo de aeronave (1 - Carga, 2 - Passageiro): ");
     scanf("%d", &tipo_input);
     clear_input();
-    nova->tipo = (tipo_input == 1) ? CARGA : PASSAGEIRO;
+    if (tipo_input == 1) {
+    nova->tipo = CARGA;
+        } else {
+    nova->tipo = PASSAGEIRO;
+}
 
     printf("Número de passageiros: ");
     scanf("%d", &nova->n_passageiros);
@@ -97,7 +101,7 @@ dados_aeronaves_t *cadastrar_nova_aeronave()
     printf("Situação da aeronave (1 - Operação, 2 - Manutenção): ");
     scanf("%d", &situacao_input);
     clear_input();
-    nova->situacao = (situacao_input == 1) ? OPERACAO : MANUTENCAO;
+    nova->situacao = (situacao_input == 1) ? OPERACAO : MANUTENCAO; //Descobri esse jeitinho top invés de um if, basicamente um if e else que ainda dependem de ser verdadeira
     nova->n_manutencoes = 0;
 
     nova->prox = NULL;

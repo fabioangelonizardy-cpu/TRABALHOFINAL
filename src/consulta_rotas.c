@@ -20,7 +20,7 @@ void inicializar_base_rotas(struct base_rotas *rotas)
 void inserir_rota_base_dados(struct base_rotas *rotas, dados_cia_t *rota, int modo)
 {
     rota->prox = NULL;
-    
+
     if (rotas->inicio == NULL) {
         rotas->fim = rota;
         rotas->inicio = rota;
@@ -227,7 +227,7 @@ void percentual_voos_realizados_destino(const string destino, dados_cia_t *lista
         return;
     }
 
-    double percentual = ((double)rotas_para_destino / total_rotas) * 100.0;
+    double percentual = ((double)rotas_para_destino / total_rotas) * 100.0; //doublezinho pra transformar em float
     printf("Percentual de voos realizados para o destino '%s': %.2f%%\n", destino, percentual);
 }
 

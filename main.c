@@ -315,7 +315,7 @@ int main()
                             printf("Digite o nome do arquivo HTML para exportar as rotas: ");
                             fgets(nome_arquivo, STR_SIZE, stdin);
                             nova_linha(nome_arquivo);
-                            exportar_rotas_arquivo_html(base_aeronaves, nome_arquivo);
+                            exportar_rotas_arquivo_html(base_rotas, nome_arquivo);
                             break;
                             
                         default:
