@@ -117,24 +117,6 @@ int sub_menu_arquivos()
 
 }
 
-int sub_menu_relatorios_arquivos()
-{
-    int opc;
-    printf("------------- Relatórios em arquivos  ------------------------\n");
-    printf("1 - Relatório de aeronaves cadastradas (Sem formatação))\n");
-    printf("2 - Relatório de rotas cadastradas (Sem formatação)\n");
-    printf("3 - Relatório de aeronaves cadastradas (CSV)\n");
-    printf("4 - Relatório de rotas cadastradas (CSV)\n");
-    printf("5 - Relatório de aeronaves cadastradas (HTML)\n");
-    printf("6 - Relatório de rotas cadastradas (HTML)\n");
-    if (scanf("%d", &opc) != 1) {
-        clear_input();
-        return -1;
-    }
-    clear_input();
-    return opc;
-
-}
 
 void clear_input(void)
 {

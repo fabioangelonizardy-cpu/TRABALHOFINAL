@@ -19,4 +19,6 @@ void percentual_voos_realizados_destino(const string destino, dados_cia_t *lista
 void listar_rota_maior_numero_passageiros(dados_cia_t *lista);
 void listar_rota_menor_numero_passageiros(dados_cia_t *lista);
 
+void inserir_rota_base_dados(struct base_rotas *rotas, dados_cia_t *rota, int modo);
+
 #endif

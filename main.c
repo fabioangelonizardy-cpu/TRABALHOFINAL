@@ -5,8 +5,6 @@
 #include "./include/consulta_rotas.h"
 #include "./include/gerar_arquivos.h"
 
-
-
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
@@ -26,6 +24,12 @@ int main()
     data_hora_t data, data_inicio, data_fim;
     dados_aeronaves_t *aux = NULL;
     dados_cia_t *rota_aux = NULL;
+
+    struct base_aeronaves aeronaves;
+    struct base_rotas rotas;
+
+    inicializar_base_aeronaves(&aeronaves);
+    inicializar_base_rotas(&rotas);
 
     int sub_opc;
 
@@ -266,59 +270,55 @@ int main()
                             printf("Opção inválida no submenu de consulta de rotas!\n");
                     }
                 break;
-/*
+
                 case 5:
                     sub_opc = sub_menu_arquivos();
 
                     switch(sub_opc){ 
-                        case 1: // Exportar arquivos binários de aeronaves
-                            salvar_dados_aeronaves_binario(base_aeronaves);
-                            break;
-                        
-                        case 2: // Exportar arquivos binários de rotas
-                            salvar_dados_rotas_binario(base_rotas);
-                            break;
-
-                        case 3: // Importar arquivos de texto de aeronaves
-                            carregar_dados_aeronaves(&base_aeronaves);
+                        case 1: // Exportar aeronaves para arquivo TXT
+                            printf("Digite o nome do arquivo TXT para exportar as aeronaves: ");
+                            fgets(nome_arquivo, STR_SIZE, stdin);
+                            nova_linha(nome_arquivo);
+                            exportar_aeronaves_arquivo_txt(base_aeronaves, nome_arquivo);
                             break;
 
-                        case 4: // Importar arquivos de texto de rotas
-                            carregar_dados_rotas(&base_rotas);
+                        case 2: // Exportar rotas para arquivo TXT
+                            printf("Digite o nome do arquivo TXT para exportar as rotas: ");
+                            fgets(nome_arquivo, STR_SIZE, stdin);
+                            nova_linha(nome_arquivo);
+                            exportar_rotas_arquivo_txt(base_rotas, nome_arquivo);
                             break;
 
-                        case 5: // Exportar arquivos de texto de aeronaves
-                            exportar_aeronaves_arquivos_texto(base_aeronaves);
+                        case 3: // Exportar aeronaves para arquivo CSV
+                            printf("Digite o nome do arquivo CSV para exportar as aeronaves: ");
+                            fgets(nome_arquivo, STR_SIZE, stdin);
+                            nova_linha(nome_arquivo);
+                            exportar_aeronaves_arquivo_csv(base_aeronaves, nome_arquivo);
                             break;
 
-                        case 6: // Exportar arquivos de texto de rotas
-                            exportar_rotas_arquivos_texto(base_rotas);
+                        case 4: // Exportar rotas para arquivo CSV
+                            printf("Digite o nome do arquivo CSV para exportar as rotas: ");
+                            fgets(nome_arquivo, STR_SIZE, stdin);
+                            nova_linha(nome_arquivo);
+                            exportar_rotas_arquivo_csv(base_rotas, nome_arquivo);
                             break;
 
-                        case 7: // Exportar arquivos csv de aeronaves
-                            exportar_aeronaves_arquivo_csv(base_aeronaves);
-                            break;
-
-                        case 8: // Exportar arquivos csv de rotas
-                            exportar_rotas_arquivo_csv(base_rotas);
-                            break;
-
-                        case 9: // Exportar arquivos html de aeronaves
-                            exportar_aeronaves_arquivo_html(base_aeronaves);
-                            break;
-
-                        case 10: // Exportar arquivos html de rotas
-                            exportar_rotas_arquivo_html(base_rotas);
+                        case 5: // Exportar aeronaves para arquivo HTML
+                            printf("Digite o nome do arquivo HTML para exportar as aeronaves: ");
+                            fgets(nome_arquivo, STR_SIZE, stdin);
+                            nova_linha(nome_arquivo);
+                            exportar_aeronaves_arquivo_html(base_aeronaves, nome_arquivo);
                             break;
                             
-
                         default:
                             printf("Opção inválida no submenu de arquivos!\n");
                     
                     }
-                            */
+                            
             case 0:
                 printf("Encerrando o programa...\n");
+                salvar_dados_aeronaves_binario(aeronaves.inicio);
+                salvar_dados_rotas_binario(rotas.inicio);
                 break;
             default:
                 printf("Opção inválida! Digite um número das opções abaixo.\n");

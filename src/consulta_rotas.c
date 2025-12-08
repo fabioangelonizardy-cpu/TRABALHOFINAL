@@ -17,6 +17,24 @@ void inicializar_base_rotas(struct base_rotas *rotas)
     rotas->contador = 0;
 }
 
+void inserir_rota_base_dados(struct base_rotas *rotas, dados_cia_t *rota, int modo)
+{
+    if (rotas->inicio == NULL) {
+        rotas->fim = rota;
+        rotas->inicio = rota;
+        return;
+    }
+
+    if(modo == 1) { //Inicio
+        rota->prox = rotas->inicio;
+        rotas->inicio = rota;
+
+    } else if(modo == 2) { //Fim
+        rotas->fim->prox = rota;
+        rotas->fim = rota;
+    }
+}
+
 dados_cia_t *cadastrar_nova_rota()
 {
     dados_cia_t *rota = (dados_cia_t *)malloc(sizeof(dados_cia_t));

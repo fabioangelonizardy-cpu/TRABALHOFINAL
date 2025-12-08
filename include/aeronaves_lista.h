@@ -14,4 +14,6 @@ void relatorio_aeronaves_cadastradas(dados_aeronaves_t *lista);
 void quantidade_manutencoes_aeronave(const string matricula, dados_aeronaves_t *lista);
 void alterar_situacao_aeronave(const string matricula, situacao_t nova_situacao, dados_aeronaves_t *lista);
 
+void inserir_aeronave_base_dados(struct base_aeronaves *aeronaves, dados_aeronaves_t *aeronave, int modo);
+
 #endif
