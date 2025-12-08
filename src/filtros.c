@@ -9,9 +9,6 @@
 
 // ----------------------------------- FILTROS AERONAVES -----------------------------------
 
-dados_aeronaves_t *base_aeronaves = NULL;
-dados_cia_t *base_rotas = NULL;
-
 void listar_aeronaves_por_fabricante(const string fabricante, dados_aeronaves_t *lista)
 {
     while (lista != NULL) {

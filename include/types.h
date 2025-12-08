@@ -86,4 +86,7 @@ struct base_rotas {
     dados_cia_t *fim;
 };
 
+extern dados_aeronaves_t *base_aeronaves;
+extern dados_cia_t *base_rotas;
+
 #endif

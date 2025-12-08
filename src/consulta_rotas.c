@@ -9,27 +9,11 @@
 
 // ----------------------------------- CADASTRO DE ROTAS -----------------------------------
 
-dados_aeronaves_t *base_aeronaves = NULL;
-dados_cia_t *base_rotas = NULL;
-
 void inicializar_base_rotas(struct base_rotas *rotas)
 {
     rotas->inicio = NULL;
     rotas->fim = NULL;
     rotas->contador = 0;
-}
-
-void inserir_rota(dados_cia_t **lista, dados_cia_t *nova)
-{
-    if (*lista == NULL) {
-        *lista = nova;
-    } else {
-        dados_cia_t *atual = *lista;
-        while (atual->prox != NULL) {
-            atual = atual->prox;
-        }
-        atual->prox = nova;
-    }
 }
 
 dados_cia_t *cadastrar_nova_rota()
