@@ -6,6 +6,7 @@
 
 #include "../include/types.h"
 #include "../include/funcao_base.h"
+#include "../include/aeronaves_lista.h"
 
 // ----------------------------------- CADASTRO DE ROTAS -----------------------------------
 
@@ -27,6 +28,7 @@ dados_cia_t *cadastrar_nova_rota()
     printf("Código da rota: ");
     fgets(rota->codigo_rota, STR_SIZE, stdin);
     nova_linha(rota->codigo_rota);
+    formatar_maiusculo(rota->codigo_rota);
 
     printf("Data e hora de partida (dd/mm/aaaa/hh): ");
     scanf("%d/%d/%d/%d", &rota->data_hora_partida.dia, &rota->data_hora_partida.mes,
@@ -36,13 +38,15 @@ dados_cia_t *cadastrar_nova_rota()
     printf("Origem: ");
     fgets(rota->origem, STR_SIZE, stdin);
     nova_linha(rota->origem);
+    formatar_maiusculo(rota->origem);
 
     printf("Destino: ");
     fgets(rota->destino, STR_SIZE, stdin);
     nova_linha(rota->destino);
+    formatar_maiusculo(rota->destino);
 
-    printf("Estimativa de voo (horas minutos): ");
-    scanf("%d %d", &rota->estimativa_voo.horas_estimada, &rota->estimativa_voo.minutos_estimados);
+    printf("Estimativa de voo (hh:mm): ");
+    scanf("%d:%d", &rota->estimativa_voo.horas_estimada, &rota->estimativa_voo.minutos_estimados);
     clear_input();
 
     printf("Combustível (litros): ");
@@ -62,7 +66,6 @@ dados_cia_t *cadastrar_nova_rota()
     clear_input();
 
     // Agora escreve os membros da tripulação por quantidade
-    // garantir string vazia antes de concatenar
     rota->membros_tripulacao[0] = '\0';
     for (int i = 0; i < rota->qtd_tripulacao; i++) {
         char membro[STR_SIZE];
@@ -76,15 +79,16 @@ dados_cia_t *cadastrar_nova_rota()
     }
 
     //Agora não irei permitir que a aeronave alocada seja inválida!!!!
-
     printf("Aeronave alocada (matrícula): ");
     fgets(rota->aeronave_alocada, STR_SIZE, stdin);
     nova_linha(rota->aeronave_alocada);
-    if (strlen(rota->aeronave_alocada) == 0) {
-        printf("Aeronave alocada não pode ser vazia. Rota não cadastrada.\n");
+    if(busca_aeronave_por_matricula(rota->aeronave_alocada, base_aeronaves) == NULL) {
+        printf("Aeronave com matrícula '%s' não encontrada. Rota não cadastrada.\n", rota->aeronave_alocada);
         free(rota);
         return NULL;
     }
+        
+
     rota->prox = NULL;
 
     return rota;
@@ -159,9 +163,10 @@ void listar_rotas_por_origem(const string origem, dados_cia_t *lista)
             printf("\n");
         }
         lista = lista->prox;
-
     }
+
 }
+
 
 void listar_rotas_por_destino(const string destino, dados_cia_t *lista)
 {
@@ -216,5 +221,65 @@ int consumo_combustivel_intervalo_datas(data_hora_t data_inicio, data_hora_t dat
         lista = lista->prox;
     }
     return total_combustivel;
+}
+
+void listar_rota_maior_numero_passageiros(dados_cia_t *lista)
+{
+    dados_cia_t *maior_rota = lista;
+    if(lista == NULL) {
+        printf("Nenhuma rota cadastrada.\n");
+        return;
+    }
+    while (lista != NULL) {
+        if (lista->qtd_passageiros > maior_rota->qtd_passageiros) {
+            maior_rota = lista;
+        }
+        lista = lista->prox;
+    }
+    printf("Rota com maior número de passageiros:\n");
+    printf("Código da rota: %s\n", maior_rota->codigo_rota);
+    printf("Data e hora de partida: %02d/%02d/%04d %02d:00\n", maior_rota->data_hora_partida.dia,
+           maior_rota->data_hora_partida.mes, maior_rota->data_hora_partida.ano, maior_rota->data_hora_partida.hora);
+    printf("Origem: %s\n", maior_rota->origem);
+    printf("Destino: %s\n", maior_rota->destino);
+    printf("Estimativa de voo: %d horas e %d minutos\n", maior_rota->estimativa_voo.horas_estimada,
+           maior_rota->estimativa_voo.minutos_estimados);
+    printf("Combustível: %d litros\n", maior_rota->combustivel);
+    printf("Quantidade de passageiros: %d\n", maior_rota->qtd_passageiros);
+    printf("Quantidade de carga: %d kg\n", maior_rota->qtd_carga);
+    printf("Quantidade de tripulação: %d\n", maior_rota->qtd_tripulacao);
+    printf("Membros da tripulação: %s\n", maior_rota->membros_tripulacao);
+    printf("Aeronave alocada (matrícula): %s\n", maior_rota->aeronave_alocada);
+
+
+}
+void listar_rota_menor_numero_passageiros(dados_cia_t *lista)
+{
+    dados_cia_t *menor_rota = lista;
+    if(lista == NULL) {
+        printf("Nenhuma rota cadastrada.\n");
+        return;
+    }
+    while (lista != NULL) {
+        if (lista->qtd_passageiros < menor_rota->qtd_passageiros) {
+            menor_rota = lista;
+        }
+        lista = lista->prox;
+    }
+    printf("Rota com menor número de passageiros:\n");
+    printf("Código da rota: %s\n", menor_rota->codigo_rota);
+    printf("Data e hora de partida: %02d/%02d/%04d %02d:00\n", menor_rota->data_hora_partida.dia,
+           menor_rota->data_hora_partida.mes, menor_rota->data_hora_partida.ano, menor_rota->data_hora_partida.hora);
+    printf("Origem: %s\n", menor_rota->origem);
+    printf("Destino: %s\n", menor_rota->destino);
+    printf("Estimativa de voo: %d horas e %d minutos\n", menor_rota->estimativa_voo.horas_estimada,
+           menor_rota->estimativa_voo.minutos_estimados);
+    printf("Combustível: %d litros\n", menor_rota->combustivel);
+    printf("Quantidade de passageiros: %d\n", menor_rota->qtd_passageiros);
+    printf("Quantidade de carga: %d kg\n", menor_rota->qtd_carga);
+    printf("Quantidade de tripulação: %d\n", menor_rota->qtd_tripulacao);
+    printf("Membros da tripulação: %s\n", menor_rota->membros_tripulacao);
+    printf("Aeronave alocada (matrícula): %s\n", menor_rota->aeronave_alocada);
+
 }
 

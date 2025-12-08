@@ -10,6 +10,7 @@
 #include "../include/consulta_rotas.h"
 
 // ----------------------------------- EXPORTAR PARA ARQUIVO DE TEXTO -----------------------------------
+
 void salvar_dados_aeronaves_binario(struct dados_aeronaves *inicio)
 {
     FILE *file = fopen("aeronaves.bin", "wb");

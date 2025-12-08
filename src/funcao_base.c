@@ -50,7 +50,7 @@ int sub_menu_rotas()
 {
     int opc;
     printf("------------- Cadastro de rotas ---------------------\n");    
-    printf("1 - Cadastrar nova rota\n");    
+    printf("1 - Cadastrar nova rota\n");
     printf("2 - Relatório de rotas cadastradas\n");
     printf("3 - Remover rota por código\n");
     printf("4 - Consultar rota por data\n");
