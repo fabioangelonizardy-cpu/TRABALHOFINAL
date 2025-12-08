@@ -310,10 +310,16 @@ int main()
                             nova_linha(nome_arquivo);
                             exportar_aeronaves_arquivo_html(base_aeronaves, nome_arquivo);
                             break;
+
+                        case 6: //Exportar rotas para arquivo HTML
+                            printf("Digite o nome do arquivo HTML para exportar as rotas: ");
+                            fgets(nome_arquivo, STR_SIZE, stdin);
+                            nova_linha(nome_arquivo);
+                            exportar_rotas_arquivo_html(base_aeronaves, nome_arquivo);
+                            break;
                             
                         default:
                             printf("Opção inválida no submenu de arquivos!\n");
-                    
                     }
                             
             case 0:
