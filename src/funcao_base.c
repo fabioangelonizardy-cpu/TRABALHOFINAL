@@ -100,14 +100,11 @@ int sub_menu_arquivos()
 {
     int opc;
     printf("------------- Gerar arquivos  ------------------------\n");
-    printf("1 - Exportar aeronaves (Binário)\n");
-    printf("2 - Exportar rotas (Binário)\n");
-    printf("3 - Importar aeronaves (.txt)\n");
-    printf("4 - Importar rotas (.txt)\n");
-    printf("5 - Exportar aeronaves (.csv)\n");
-    printf("6 - Exportar rotas (.csv)\n");
-    printf("7 - Exportar aeronaves (.html)\n");
-    printf("8 - Exportar rotas (.html)\n");
+    printf("1 - Exportar aeronaves .txt");
+    printf("2 - Exportar rotas .txt");
+    printf("3 - Exportar aeronaves .csv");
+    printf("4 - Exportar rotas .csv");
+    printf("6 - Exportar aeronaves .html");
     if (scanf("%d", &opc) != 1) {
         clear_input();
         return -1;

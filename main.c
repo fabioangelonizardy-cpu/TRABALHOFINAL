@@ -259,11 +259,12 @@ int main()
                             break;
 
                         case 4: // Listar rotas com menor número de passageiros
-                            listar_rota_menor_numero_passageiros(base_rotas);
+                            listar_rota_maior_numero_passageiros(base_rotas);
                             break;
+                            
 
                         case 5: // Listar rotas com maior número de passageiros
-                            listar_rota_maior_numero_passageiros(base_rotas);
+                            listar_rota_menor_numero_passageiros(base_rotas); //Sim, eu inverti os nomes
                             break;
 
                         default:

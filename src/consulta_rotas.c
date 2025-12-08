@@ -19,6 +19,8 @@ void inicializar_base_rotas(struct base_rotas *rotas)
 
 void inserir_rota_base_dados(struct base_rotas *rotas, dados_cia_t *rota, int modo)
 {
+    rota->prox = NULL;
+    
     if (rotas->inicio == NULL) {
         rotas->fim = rota;
         rotas->inicio = rota;

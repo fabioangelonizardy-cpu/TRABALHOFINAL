@@ -66,6 +66,8 @@ void carregar_dados_aeronaves(struct base_aeronaves *aeronaves)
     while(!feof(file)) {
         novo = (struct base_aeronaves *)malloc(sizeof(struct base_aeronaves));
         fread(novo, sizeof(struct base_aeronaves), 1, file);
+        dados_aeronaves_t *novo;
+        novo = malloc(sizeof(dados_aeronaves_t));
         novo->prox = NULL;
 
         if(!feof(file)) {
@@ -79,26 +81,29 @@ void carregar_dados_aeronaves(struct base_aeronaves *aeronaves)
 void carregar_dados_rotas(struct base_rotas *rotas)
 {
     FILE *file = NULL;
-    struct base_rotas *novo = NULL;
+    dados_cia_t *novo = NULL;
 
     file = fopen("rotas.bin", "rb");
 
-    if(!file) {
+    if (!file) {
         printf("Erro ao abrir o arquivo para leitura.\n");
         return;
     }
 
-    while(!feof(file)) {
-        novo = (struct base_rotas *)malloc(sizeof(struct base_rotas));
-        fread(novo, sizeof(struct base_rotas), 1, file);
+    while (!feof(file)) {
+        novo = (dados_cia_t *) malloc(sizeof(dados_cia_t));
+        fread(novo, sizeof(dados_cia_t), 1, file);
+        
         novo->prox = NULL;
 
-        if(!feof(file)) {
+        if (!feof(file)) {
             inserir_rota_base_dados(rotas, novo, 2);
         } else {
             free(novo);
         }
     }
+
+    fclose(file);
 }
 
 // ----------------------------------- EXPORTAR PARA ARQUIVO TXT -----------------------------------

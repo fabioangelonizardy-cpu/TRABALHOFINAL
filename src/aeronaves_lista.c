@@ -19,6 +19,8 @@ void inicializar_base_aeronaves(struct base_aeronaves *aeronaves)
 
 void inserir_aeronave_base_dados(struct base_aeronaves *aeronaves, dados_aeronaves_t *aeronave, int modo)
 {
+    aeronave->prox = NULL;
+    
     if (aeronaves->inicio == NULL) {
         aeronaves->fim = aeronave;
         aeronaves->inicio = aeronave;
