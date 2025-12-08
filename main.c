@@ -20,7 +20,7 @@ int main()
 {
     int opc, ano, situacao, tipo;
     char confirma;
-    string matricula, fabricante, modelo, destino, origem, nome_arquivo;
+    string matricula, fabricante, modelo, destino, origem, nome_arquivo, n_rota;
     data_hora_t data, data_inicio, data_fim;
     dados_aeronaves_t *aux = NULL;
     dados_cia_t *rota_aux = NULL;
@@ -138,26 +138,26 @@ int main()
 
                     case 3: // Remover rota por código
                         printf("Digite o código da rota a ser removida: ");
-                        fgets(nome_arquivo, STR_SIZE, stdin);
-                        nova_linha(nome_arquivo);
-                        printf("Certeza que deseja remover a rota com código '%s'? (s/n): ", nome_arquivo);
+                        fgets(n_rota, STR_SIZE, stdin);
+                        nova_linha(n_rota);
+                        printf("Certeza que deseja remover a rota com código '%s'? (s/n): ", n_rota);
                         scanf(" %c", &confirma);
                         clear_input();
                         if (confirma == 's' || confirma == 'S') {
                             rota_aux = base_rotas;
-                            bool encontrada = false;
+                            bool encontrada = false; //A preguiça de criar um buscar_rota_codigo() me fez achar essa formula
                             while (rota_aux != NULL) {
-                                if (strcmp(rota_aux->codigo_rota, nome_arquivo) == 0) {
+                                if (strcmp(rota_aux->codigo_rota, n_rota) == 0) {
                                     encontrada = true;
                                     break;
                                 }
                                 rota_aux = rota_aux->prox;
                             }
                             if (!encontrada) {
-                                printf("Rota com código '%s' não encontrada.\n", nome_arquivo);
+                                printf("Rota com código '%s' não encontrada.\n", n_rota);
                             } else {
-                                remover_rota_por_codigo(nome_arquivo, &base_rotas);
-                                printf("Rota com código '%s' removida com sucesso.\n", nome_arquivo);
+                                remover_rota_por_codigo(n_rota, &base_rotas);
+                                printf("Rota com código '%s' removida com sucesso.\n", n_rota);
                             }
                         } else {
                             printf("Remoção cancelada.\n");
