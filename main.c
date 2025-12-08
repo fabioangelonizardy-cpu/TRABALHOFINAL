@@ -16,8 +16,6 @@
 dados_aeronaves_t *base_aeronaves = NULL;
 dados_cia_t *base_rotas = NULL;
 
-
-
 //----------------------------------- FUNÇÃO MAIN -----------------------------------
 
 int main()
