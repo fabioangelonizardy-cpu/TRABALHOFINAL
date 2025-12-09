@@ -109,6 +109,23 @@ dados_aeronaves_t *cadastrar_nova_aeronave()
     return nova;
 }
 
+/*
+void cadastrar_e_inserir_no_inicio(dados_aeronaves_t **lista)
+{
+    dados_aeronaves_t *nova = cadastrar_nova_aeronave();
+
+    if (nova == NULL) {
+        printf("Falha ao cadastrar aeronave.\n");
+        return;
+    }
+
+    // Inserção no início da lista
+    nova->prox = *lista;
+    *lista = nova;
+
+    printf("Aeronave inserida no início da lista com sucesso.\n");
+}
+*/
 
 void relatorio_aeronaves_cadastradas(dados_aeronaves_t *lista)
 {

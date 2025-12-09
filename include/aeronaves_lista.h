@@ -5,6 +5,7 @@
 
 // Aeronaves (LISTA)
 dados_aeronaves_t *cadastrar_nova_aeronave();
+void cadastrar_e_inserir_no_inicio(dados_aeronaves_t **lista); //Função não sera implementada, só pra mostrar
 void inicializar_base_aeronaves(struct base_aeronaves *aeronaves);
 void inserir_aeronave(dados_aeronaves_t **lista, dados_aeronaves_t *nova);
 
